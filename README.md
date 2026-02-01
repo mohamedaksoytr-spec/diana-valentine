@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Diana, be my Valentine? 🍒💖</title>
+  <style>
+    :root{
+      /* Cherry palette (white + cherry reds) */
+      --cherry-900:#7A001F;
+      --cherry-800:#8B0024;
+      --cherry-700:#A0002A;
+      --cherry-600:#B70030;
+      --cherry-500:#D2042D; /* classic cherry red vibe */
+      --cherry-400:#E63A5A;
+      --cherry-200:#FFD6DF;
+
+      --bg:#fff7f9;
+      --card:#ffffff;
+      --text:#1f1f1f;
+      --muted:#5b5b5b;
+
+      --yes1:#D2042D;
+      --yes2:#A0002A;
+
+      --no1:#ffffff;
+      --no2:#fff1f4;
+
+      --ring: rgba(210,4,45,0.25);
+      --shadow: 0 20px 60px rgba(122,0,31,0.18);
+    }
+
+    *{ box-sizing:border-box; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(210,4,45,0.10), transparent 45%),
+        radial-gradient(circle at 80% 30%, rgba(230,58,90,0.10), transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(210,4,45,0.08), transparent 55%),
+        var(--bg);
+      overflow:hidden;
+      color: var(--text);
+    }
+
+    .hearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:0.25;
+    }
+    .hearts::before{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><text x="10" y="70" font-size="48">🍒</text></svg>');
+      background-size: 120px 120px;
+      animation: drift 20s linear infinite;
+    }
+    @keyframes drift{
+      from{ transform: translate3d(0,0,0) rotate(0deg); }
+      to{ transform: translate3d(-160px, -160px, 0) rotate(8deg); }
+    }
+
+    .card{
+      width:min(720px, 92vw);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(210,4,45,0.10);
+      border-radius: 28px;
+      padding: 28px 22px;
+      box-shadow: var(--shadow);
+      text-align:center;
+      position:relative;
+      backdrop-filter: blur(10px);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(210,4,45,0.06);
+      border: 1px solid rgba(210,4,45,0.14);
+      color: var(--cherry-800);
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    h1{
+      margin: 0 0 8px;
+      font-size: clamp(26px, 4vw, 46px);
+      letter-spacing: -0.6px;
+    }
+
+    .name{
+      display:inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(210,4,45,0.08);
+      border: 1px solid rgba(210,4,45,0.18);
+      color: var(--cherry-900);
+      font-weight: 900;
+    }
+
+    p{
+      margin: 6px 0 18px;
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .when{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin: 8px 0 18px;
+      color: rgba(31,31,31,0.85);
+      font-weight: 800;
+    }
+    .pill{
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(210,4,45,0.14);
+      box-shadow: 0 10px 25px rgba(122,0,31,0.08);
+    }
+
+    .stage{
+      margin-top: 10px;
+      height: 280px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,246,248,0.70));
+      border: 1px dashed rgba(210,4,45,0.28);
+      position: relative;
+      overflow: hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .buttons{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    button{
+      border:0;
+      border-radius: 999px;
+      padding: 14px 18px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor:pointer;
+      box-shadow: 0 12px 28px rgba(122,0,31,0.16);
+      transition: transform .10s ease, box-shadow .10s ease;
+      user-select:none;
+      touch-action: manipulation;
+      outline: none;
+    }
+    button:focus-visible{
+      box-shadow: 0 0 0 6px var(--ring), 0 12px 28px rgba(122,0,31,0.16);
+    }
+
+    #yesBtn{
+      background: linear-gradient(180deg, var(--yes1), var(--yes2));
+      color:white;
+      min-width: 140px;
+    }
+
+    #noBtn{
+      background: linear-gradient(180deg, var(--no1), var(--no2));
+      color: var(--cherry-800);
+      border: 1px solid rgba(210,4,45,0.22);
+      min-width: 120px;
+
+      position:absolute;
+      left: 60%;
+      top: 58%;
+      transform: translate(-50%, -50%);
+    }
+
+    .success{
+      display:none;
+      margin-top: 16px;
+      padding: 16px 16px;
+      border-radius: 18px;
+      background: rgba(210,4,45,0.06);
+      border: 1px solid rgba(210,4,45,0.18);
+      color: var(--cherry-900);
+      font-weight: 900;
+    }
+    .success .small{
+      margin-top: 8px;
+      font-size: 13px;
+      opacity: 0.82;
+      font-weight: 700;
+      color: rgba(31,31,31,0.75);
+    }
+
+    .tiny{
+      margin-top: 12px;
+      font-size: 13px;
+      opacity: 0.72;
+      color: rgba(31,31,31,0.72);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hearts" aria-hidden="true"></div>
+
+  <main class="card" role="main">
+    <div class="badge">🍒 Cherry & White Theme</div>
+
+    <h1>Hey <span class="name">Diana</span> 💖</h1>
+    <p>I have one important question…</p>
+
+    <div class="when" aria-label="date and time">
+      <div class="pill">📅 Feb 14</div>
+      <div class="pill">🕗 8:00 PM</div>
+    </div>
+
+    <p><strong>Will you be my Valentine?</strong></p>
+
+    <section class="stage" id="stage" aria-label="Valentine question area">
+      <div class="buttons" id="buttonsLayer">
+        <button id="yesBtn" type="button">Yes 💘</button>
+        <button id="noBtn" type="button" aria-label="No button">No 🙈</button>
+      </div>
+    </section>
+
+    <div class="success" id="successMsg">
+      YAY!! 🍒💞 Diana said YES.
+      <div class="small">See you Feb 14 at 8:00 PM 😄</div>
+      <div class="small">🎶 “You are my fire”</div>
+    </div>
+
+    <div class="tiny">Tip: If audio doesn’t play, tap “Yes” again (phones sometimes block sound until a tap).</div>
+  </main>
+
+  <script>
+    const stage = document.getElementById("stage");
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const successMsg = document.getElementById("successMsg");
+
+    let noDodges = 0;
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function moveNoButton(extraDistance = 0) {
+      const pad = 10;
+      const stageRect = stage.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxX = stageRect.width - btnRect.width - pad;
+      const maxY = stageRect.height - btnRect.height - pad;
+
+      const bias = Math.min(noDodges * 0.02, 0.25) + (extraDistance * 0.0005);
+      const rx = Math.random();
+      const ry = Math.random();
+
+      const x = (rx < 0.5 ? rx * (1 - bias) : rx * (1 + bias)) * maxX + pad;
+      const y = (ry < 0.5 ? ry * (1 - bias) : ry * (1 + bias)) * maxY + pad;
+
+      noBtn.style.left = clamp(x, pad, maxX) + "px";
+      noBtn.style.top  = clamp(y, pad, maxY) + "px";
+      noBtn.style.transform = "translate(0, 0)";
+    }
+
+    function dodgeIfNearPointer(clientX, clientY) {
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const cx = btnRect.left + btnRect.width / 2;
+      const cy = btnRect.top + btnRect.height / 2;
+      const dx = clientX - cx;
+      const dy = clientY - cy;
+      const dist = Math.hypot(dx, dy);
+
+      const danger = 140 + Math.min(noDodges * 10, 140);
+
+      if (dist < danger) {
+        noDodges++;
+        moveNoButton(danger);
+
+        const scale = 1 + Math.min(noDodges * 0.06, 0.7);
+        yesBtn.style.transform = `scale(${scale})`;
+      }
+    }
+
+    stage.addEventListener("mousemove", (e) => {
+      dodgeIfNearPointer(e.clientX, e.clientY);
+    });
+
+    stage.addEventListener("pointermove", (e) => {
+      dodgeIfNearPointer(e.clientX, e.clientY);
+    });
+
+    noBtn.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      noDodges++;
+      moveNoButton(240);
+    });
+
+    noBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      noDodges++;
+      moveNoButton(300);
+    });
+
+    async function playCuteSongAndLine() {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+
+      const ctx = new AudioContext();
+      const now = ctx.currentTime;
+
+      const master = ctx.createGain();
+      master.gain.value = 0.12;
+      master.connect(ctx.destination);
+
+      function note(freq, t, dur) {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = "triangle";
+        o.frequency.setValueAtTime(freq, t);
+
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(1.0, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+        o.connect(g);
+        g.connect(master);
+        o.start(t);
+        o.stop(t + dur + 0.02);
+      }
+
+      const seq = [
+        [659.25, 0.00, 0.18],
+        [783.99, 0.20, 0.18],
+        [880.00, 0.40, 0.18],
+        [783.99, 0.60, 0.18],
+        [659.25, 0.80, 0.22],
+        [587.33, 1.05, 0.22],
+        [659.25, 1.30, 0.30],
+      ];
+      seq.forEach(([f, dt, d]) => note(f, now + dt, d));
+
+      setTimeout(() => {
+        try {
+          const u = new SpeechSynthesisUtterance("You are my fire");
+          u.rate = 0.95;
+          u.pitch = 1.05;
+          window.speechSynthesis.speak(u);
+        } catch {}
+      }, 1100);
+    }
+
+    yesBtn.addEventListener("click", async () => {
+      successMsg.style.display = "block";
+      stage.style.display = "none";
+      try { await playCuteSongAndLine(); } catch {}
+    });
+
+    window.addEventListener("load", () => {
+      noBtn.style.left = "62%";
+      noBtn.style.top = "58%";
+    });
+
+    window.addEventListener("resize", () => moveNoButton(0));
+  </script>
+</body>
+</html>
